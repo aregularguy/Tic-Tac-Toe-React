@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 
 // interface for todo
 interface todoitem {
@@ -12,15 +12,8 @@ interface TodoProps {
 }
 
 const Todo: React.FC<TodoProps> = ({ data }) => {
-  const [localtodo, setLocaltodo] = useState<todoitem[]>([])
   
-  useEffect(() => {
-    const storedTodos = localStorage.getItem('todo')
-    if(storedTodos) {
-      const parsedTodos = JSON.parse(storedTodos) as todoitem[]
-      setLocaltodo([...parsedTodos, ...data])
-    }
-  },[data])
+  
   // const removeItem = (item : todoitem) => {
 
   //   if()
