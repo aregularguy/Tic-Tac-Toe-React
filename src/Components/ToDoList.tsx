@@ -1,40 +1,56 @@
 import React, { useEffect, useState } from 'react'
+import Todo from './Todo'
 
-interface todo {
+interface todoitem {
     id:number,
     text:string,
     completed:boolean 
 }
-const ToDoList = () => {
-    const[todo, setTodo] = useState<todo[]>([])
-    const[input, setInput] = useState<any>('')
 
+const ToDoList = () => {
+    const[todo, setTodo] = useState<todoitem[]>([])
+    const[input, setInput] = useState<string>('')
+
+    // Load todos from localStorage on component mount
     useEffect(() => {
-           
-        // store todo in local storage
+        const storedTodos = localStorage.getItem('todo')
+        if(storedTodos) {
+            setTodo(JSON.parse(storedTodos))
+        }
+    }, [])
+    
+    // Save todos to localStorage when they change
+    useEffect(() => {
         localStorage.setItem('todo', JSON.stringify(todo))
         console.log(todo)
     },[todo])
-    const handleChange = (e:any) => {
+    
+    const handleChange = (e:React.ChangeEvent<HTMLInputElement>) => {
         setInput(e.target.value)
     }
 
-    const handleSubmit = (e:any) => {
+    const handleSubmit = (e:React.FormEvent) => {
         e.preventDefault()
-        setTodo([...todo, {id:Date.now(), text:input, completed:false}])
-        setInput('')
+        if(input.trim()) {
+            setTodo([...todo, {id:Date.now(), text:input, completed:false}])
+            setInput('')
+        }
     }
     
-  return (
-    <div>
-
-          <form>
-            
-            <input type='text' value={input} onChange={handleChange} placeholder='Add a task'></input>
-            <button type='submit'>Add</button>
+    return (
+        <div>
+            <form onSubmit={handleSubmit}>
+                <input 
+                    type='text' 
+                    value={input} 
+                    onChange={handleChange} 
+                    placeholder='Add a task'
+                />
+                <button type='submit'>Add</button>
             </form>  
-    </div>
-  )
+            <Todo data={todo} />
+        </div>
+    )
 }
 
 export default ToDoList

@@ -1,13 +1,34 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+
 // interface for todo
-interface todo {
-    id:number,
-    text:string,
-    completed:boolean 
+interface todoitem {
+    id: number,
+    text: string,
+    completed: boolean 
 }
-const Todo = () => {
+
+interface TodoProps {
+    data: todoitem[]
+}
+
+const Todo: React.FC<TodoProps> = ({ data }) => {
+  const[localtodo , setlocaltodo] = useState<TodoProps>()
+  
+
   return (
-    <div>Todo</div>
+    <div>
+      <ul className="todo-list">
+        {data && data.length > 0 ? (
+          data.map(item => (
+            <li key={item.id} className="todo-item">
+              <span>{item.text}</span>
+            </li>
+          ))
+        ) : (
+          <li>No tasks yet. Add one above!</li>
+        )}
+      </ul>
+    </div>
   )
 }
 
