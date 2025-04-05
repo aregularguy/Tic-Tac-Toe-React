@@ -8,16 +8,11 @@ interface todoitem {
 }
 
 const ToDoList = () => {
-    const[todo, setTodo] = useState<todoitem[]>([])
+    const[todo, setTodo] = useState<todoitem[]>(() =>{
+      const savedTodos = localStorage.getItem('todo')
+      return savedTodos ? JSON.parse(savedTodos) : [] 
+    })
     const[input, setInput] = useState<string>('')
-
-    // Load todos from localStorage on component mount
-    useEffect(() => {
-        const storedTodos = localStorage.getItem('todo')
-        if(storedTodos) {
-            setTodo(JSON.parse(storedTodos))
-        }
-    }, [])
     
     // Save todos to localStorage when they change
     useEffect(() => {
